@@ -149,7 +149,7 @@ export function PaymentForm() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="monto">Monto (MXN) *</Label>
-                <Input id="monto" type="number" step="0.01" {...register('monto', { valueAsNumber: true })} />
+                <Input id="monto" type="number" step="0.01" {...register('monto', { valueAsNumber: true })} onFocus={(e) => e.target.select()} />
                 {errors.monto && <p className="text-sm text-destructive">{errors.monto.message}</p>}
               </div>
               <div className="space-y-2">

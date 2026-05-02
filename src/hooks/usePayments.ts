@@ -8,7 +8,7 @@ export function usePayments() {
   const { payments, loadingPayments, setPayments, setLoadingPayments } = useStore();
 
   useEffect(() => {
-    const q = query(collection(db, 'pagos'), orderBy('creadoEn', 'desc'));
+    const q = query(collection(db, 'pagos'), orderBy('fecha', 'desc'));
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {

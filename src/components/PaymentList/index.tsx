@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { usePayments } from '../../hooks/usePayments';
 import { useStore } from '../../store/useStore';
 import { Card, CardContent } from '../ui/card';
@@ -8,10 +9,12 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 
 export function PaymentList() {
   const { payments, loading, deletePayment } = usePayments();
   const { setEditingPayment } = useStore();
+  const [paymentToDelete, setPaymentToDelete] = useState<string | null>(null);
 
   if (loading) {
     return (
@@ -36,10 +39,11 @@ export function PaymentList() {
     );
   }
 
-  const handleDelete = (id: string) => {
-    if (window.confirm('¿Estás seguro de eliminar este pago?')) {
-      deletePayment(id);
+  const confirmDelete = () => {
+    if (paymentToDelete) {
+      deletePayment(paymentToDelete);
       toast.success('Pago eliminado');
+      setPaymentToDelete(null);
     }
   };
 
@@ -103,7 +107,7 @@ export function PaymentList() {
                     variant="ghost"
                     size="icon"
                     className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                    onClick={() => handleDelete(payment.id)}
+                    onClick={() => setPaymentToDelete(payment.id)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -113,6 +117,27 @@ export function PaymentList() {
           </motion.div>
         ))}
       </AnimatePresence>
+
+      <Dialog open={!!paymentToDelete} onOpenChange={(open) => !open && setPaymentToDelete(null)}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>¿Estás seguro de eliminar este pago?</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-sm text-muted-foreground">
+              Esta acción no se puede deshacer. Se eliminará el registro permanentemente.
+            </p>
+          </div>
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" onClick={() => setPaymentToDelete(null)}>
+              Cancelar
+            </Button>
+            <Button variant="destructive" onClick={confirmDelete}>
+              Eliminar
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

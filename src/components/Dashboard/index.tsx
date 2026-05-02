@@ -129,7 +129,7 @@ export function Dashboard() {
                 {lastPayment && (
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <CalendarClock className="h-4 w-4 text-primary" />
-                    <span>Último pago: <strong className="text-foreground">{new Date(lastPayment.fecha).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</strong></span>
+                    <span>Último pago: <strong className="text-foreground">{new Date(lastPayment.fecha + 'T12:00:00').toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</strong></span>
                   </div>
                 )}
               </div>
